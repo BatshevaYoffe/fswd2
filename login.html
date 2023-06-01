@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>כניסה והרשמה</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+
+</head>
+
+<body>
+    <form id="loginForm">
+        <h1>כניסה</h1>
+        <label for="username">שם משתמש:</label>
+        <input type="text" id="username" required><br>
+        <label for="password">סיסמה:</label>
+        <input type="password" id="password" required><br>
+        <button type="submit">כניסה</button>
+        <br />
+        <button type="button" id="registrationButton"> מעבר להרשמה</button>
+    </form>
+
+
+    <form id="registrationForm" style="display: none;">
+        <h1>הרשמה</h1>
+        <label for="newUsername">שם משתמש:</label>
+        <input type="text" id="newUsername" required><br>
+        <label for="newPassword">סיסמה:</label>
+        <input type="password" id="newPassword" required><br>
+        <button type="submit">הרשמה</button>
+        <br />
+        <button type="button" id="loginButton">מעבר לכניסה</button>
+    </form>
+
+    <script src="login.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Game Gallery</title>
+    <style>
+        .game-image {
+            width: 200px;
+            height: 200px;
+        }
+
+        /* סגנון לסרגל */
+        #navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+        }
+
+        #username {
+            margin-right: auto;
+            margin-left: 10px;
+        }
+
+        #navbar a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+
+        /* #navbar {
+            background-color: #f1f1f1;
+            padding: 10px;
+            text-align: right;
+        } */
+
+        #navbar span {
+            margin-right: 10px;
+        }
+
+        /* סגנון לטבלת ניקוד */
+        #scoreboard {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #scoreboard td,
+        #scoreboard th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #scoreboard th {
+            background-color: #f1f1f1;
+            text-align: center;
+        }
+
+        .game-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .game-list a {
+            margin: 10px;
+            text-decoration: none;
+        }
+
+        .game-image {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="navbar">
+        <span id="username"></span>
+        <a href="gamesGallery.html">משחקים</a>
+        <a href="home.html">ניקוד שחקנים</a>
+        <a href="login.html">יציאה</a>
+    </div>
+    <h1>Game Gallery</h1>
+    <div class="game-list">
+        <a href="letters.html">
+            <img src="./images/letters.jpeg" alt="Letters" class="game-image">
+        </a>
+        <a href="memory.html">
+            <img src="./images/memory.jpeg" alt="Memory" class="game-image">
+        </a>
+        <a>
+            <img src="./images/commingSoon.jpeg" alt="1" class="game-image">
+        </a>
+        <a>
+            <img src="./images/commingSoon.jpeg" alt="2" class="game-image">
+        </a>
+        <a>
+            <img src="./images/commingSoon.jpeg" alt="3" class="game-image">
+        </a>
+        <!-- הוספת תמונות של משחקים נוספים עם קישורים לעמודי המשחק המתאימים -->
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>עמוד ראשי</title>
+  <style>
+    /* סגנון לסרגל */
+    #navbar {
+      background-color: #f1f1f1;
+      padding: 10px;
+      text-align: right;
+    }
+
+    #navbar span {
+      margin-right: 10px;
+    }
+
+    /* סגנון לטבלת ניקוד */
+    #scoreboard {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    #scoreboard td, #scoreboard th {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+
+    #scoreboard th {
+      background-color: #f1f1f1;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div id="navbar">
+    <span id="username"></span>
+    <a href="gamesGallery.html">משחקים</a>
+    <a href="login.html">יציאה</a>
+  </div>
+
+  <h1>טבלת ניקוד</h1>
+  <table id="scoreboard">
+    <thead>
+      <tr>
+        <th>שם משתמש</th>
+        <th>ניקוד</th>
+      </tr>
+    </thead>
+    <tbody id="scoreboardBody">
+      <!-- נתוני הטבלה ייכנסו כאן באמצעות JavaScript -->
+    </tbody>
+  </table>
+
+  <script src="home.js"></script>
+  <script>
+    // שליפת השם מאחסון המקומי
+  var storedUsername = localStorage.getItem('playnow');
+  var usernameElement = document.getElementById('username');
+
+  // הצגת השם בתוך האלמנט
+  usernameElement.textContent = storedUsername;
+</script>
+</body>
+</html>
+<!-- 
+<!DOCTYPE html>
+<html>
+<head>
+  <title>כניסה והרשמה</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+
+</head>
+<body>
+  <h1>welcome</h1>
+  <h1>שם משתמש:</h1>
+  <p id="username"></p>
+
+  
+</body>
+</html>
+ -->

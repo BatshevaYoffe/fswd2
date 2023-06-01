@@ -1,0 +1,26 @@
+body {
+    text-align: center;
+  }
+  
+  h1 {
+    color: #333;
+  }
+  
+  form {
+    display: inline-block;
+    margin-top: 20px;
+  }
+  
+  input[type="text"],
+  input[type="password"] {
+    padding: 5px;
+  }
+  
+  button {
+    padding: 5px 10px;
+  }
+  
+  .error {
+    color: red;
+  }
+  
