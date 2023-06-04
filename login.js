@@ -16,6 +16,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
       console.log('התחברת בהצלחה!');
     } else {
       // עושה מה שצריך כאשר הכניסה נכשלת
+      alert('שם משתמש או סיסמה שגויים!');
       console.log('שם משתמש או סיסמה שגויים!');
     }
 });
@@ -30,7 +31,9 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
       const newUser = {
         username: newUsername,
         password: newPassword,
-        score:0
+        score:0,
+        loginTimes:0,
+        winTimes:0
       };
   
       addUserToLocalStorage(newUser);
@@ -42,7 +45,10 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
   
 function getUsersFromLocalStorage() {
     const usersString = localStorage.getItem('users');
-    return JSON.parse(usersString) || [];
+    if (usersString){
+      return JSON.parse(usersString) || [];
+    }
+    return [];
 }
   
 function isUserExists(username, password) {
@@ -79,40 +85,20 @@ function setCookie(name, value, days) {
     const expires = new Date();
     expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
     document.cookie = name + '=' + value + ';expires=' + expires.toUTCString() + ';path=/';
-  }
-// // import './login.css'
-// // import 'style.css';
-// document.getElementById('login-form').addEventListener('submit', function(e) {
-//     e.preventDefault();
-    
-//     var username = document.getElementById('username').value;
-//     var password = document.getElementById('password').value;
-    
-//     var users = JSON.parse(localStorage.getItem('users')) || [];
-//     console.log(users);
-//     // var loggedInUser = users.find(function(user) {
-//     //   return user.username === username && user.password === password;
-//     // });
-//     const user = users.find(user => user.username === username && user.password === password);
+}
 
-//     console.log(loggedInUser);
-//     if (loggedInUser) {
-//       // הזדהות מוצלחת, ננתב לדף משתמש
-//       setCookie('username', username, 1);
-//       setCookie('password', password, 1);
-//     //   window.location.href = 'home.html';
-//       window.location.href = 'main.html';
-//     } else {
-//       document.getElementById('error-message').textContent = 'שם משתמש או סיסמה שגויים';
-//     }
-//   });
-  
-//   document.getElementById('signup-btn').addEventListener('click', function() {
-//     window.location.href = 'signup.html';
-//   });
-//   // פונקציה להגדרת Cookie
-// function setCookie(name, value, days) {
-//     const expires = new Date();
-//     expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
-//     document.cookie = name + '=' + value + ';expires=' + expires.toUTCString() + ';path=/';
-//   }
+function updateLoginTimes(username) {
+  // שליפת רשימת המשתמשים מהלוקל סטורז
+  var users = JSON.parse(localStorage.getItem('users')) || [];
+
+  // חיפוש המשתמש לפי שם המשתמש
+  for (var i = 0; i < users.length; i++) {
+    if (users[i].username === username) {
+      // עדכון הניקוד של המשתמש
+      users[i].loginTimes =users[i].loginTimes +1;
+      break;
+    }
+  }
+  // שמירת רשימת המשתמשים בלוקל סטורז
+  localStorage.setItem('users', JSON.stringify(users));
+}

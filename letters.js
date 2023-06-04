@@ -1,33 +1,33 @@
 
 const words = ["javascript", "html", "css", "node"];
+const LIST = new Array(26).fill(1).map((_, i) => String.fromCharCode(65 + i));
+var username =JSON.parse(localStorage.getItem('playnow'));
 
 let secretWord;
 let guessedLetters;
 let guessesLeft;
+let initialScore = 10;
 
 const wordDisplay = document.getElementById("word-display");
 const guessesLeftDisplay = document.getElementById("guesses-left");
 const lettersGuessedDisplay = document.getElementById("letters-guessed");
-const letterButtons = document.querySelectorAll(".letter-button");
-const startButton = document.getElementById("start-button");
+const keyboardContainer = document.getElementById("keyboard");
 const gameOverMessage = document.getElementById("game-over-message");
 
-startButton.addEventListener("click", startGame);
 
-function startGame() {
+initializeGame();
+
+function initializeGame() {
   secretWord = chooseRandomWord();
   guessedLetters = [];
-  guessesLeft = 10;
+  guessesLeft = initialScore;
 
   wordDisplay.textContent = generateWordDisplay(secretWord, guessedLetters);
   guessesLeftDisplay.textContent = `Guesses Left: ${guessesLeft}`;
   lettersGuessedDisplay.textContent = `Letters Guessed:`;
 
   gameOverMessage.classList.add("hidden");
-  letterButtons.forEach(button => button.disabled = false);
-  letterButtons.forEach(button => button.addEventListener("click", handleGuess));
-
-  console.log(`Secret Word: ${secretWord}`);
+  generateKeyboard();
 }
 
 function chooseRandomWord() {
@@ -47,16 +47,16 @@ function generateWordDisplay(word, guessedLetters) {
   }
   return display.trim();
 }
-const list = new Array(26).fill(1).map((_, i) => String.fromCharCode(65 + i));
 
-
-const keyboardContainer = document.getElementById("keyboard");
-
-for (const letter of list) {
-  const button = document.createElement("button");
-  button.classList.add("letter-button");
-  button.textContent = letter;
-  keyboardContainer.appendChild(button);
+function generateKeyboard() {
+  for (const letter of LIST) {
+    console.log("generateKeyboard");
+    const button = document.createElement("button");
+    button.classList.add("letter-button");
+    button.textContent = letter;
+    button.addEventListener("click", handleGuess);
+    keyboardContainer.appendChild(button);
+  }
 }
 
 function handleGuess(event) {
@@ -82,10 +82,40 @@ function checkGameOver() {
   if (guessesLeft <= 0) {
     gameOverMessage.textContent = "Game Over - You Lose!";
     gameOverMessage.classList.remove("hidden");
-    letterButtons.forEach(button => button.disabled = true);
+    disableLetterButtons();
   } else if (!wordDisplay.textContent.includes("_")) {
+    updateScore(username,initialScore);
     gameOverMessage.textContent = "Congratulations - You Win!";
     gameOverMessage.classList.remove("hidden");
-    letterButtons.forEach(button => button.disabled = true);
+    disableLetterButtons();
   }
 }
+
+function disableLetterButtons() {
+  const letterButtons = document.querySelectorAll(".letter-button");
+  letterButtons.forEach(button => button.disabled = true);
+}
+
+function updateScore(username, newScore) {
+  console.log("update");
+  // שליפת רשימת המשתמשים מהלוקל סטורז
+  var users = JSON.parse(localStorage.getItem('users')) || [];
+
+  // חיפוש המשתמש לפי שם המשתמש
+  for (var i = 0; i < users.length; i++) {
+      console.log(users[i].username);
+      console.log(username);
+
+    if (users[i].username === username) {
+      // עדכון הניקוד של המשתמש
+      console.log(users[i]);
+
+      users[i].score =users[i].score +newScore;
+      break;
+    }
+  }
+
+  // שמירת רשימת המשתמשים בלוקל סטורז
+  localStorage.setItem('users', JSON.stringify(users));
+}
+

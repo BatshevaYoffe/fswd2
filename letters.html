@@ -2,6 +2,8 @@
 <html>
 <head>
   <title>Hangman Game</title>
+  <link rel="stylesheet" type="text/css" href="navbar.css">
+
   <style>
     .hidden {
       display: none;
@@ -9,27 +11,38 @@
   </style>
 </head>
 <body>
+  <div id="navbar">
+    <span id="username"></span>
+    <a href="gamesGallery.html">משחקים</a>
+    <a href="home.html">ניקוד שחקנים</a>
+    <a href="login.html">יציאה</a>
+</div>
   <h1>Hangman Game</h1>
   <div id="word-display"></div>
   <div id="guesses-left"></div>
   <div id="letters-guessed"></div>
   <div id="keyboard"></div>
-  <button id="start-button">Start Game</button>
   <div id="game-over-message" class="hidden"></div>
+  <button id="reset-button">Start Game</button>
 
-  <script src="letters.js"></script>
   <!-- <script>
-    const list = new Array(26).fill(1).map((_, i) => String.fromCharCode(65 + i));
+    const resetButton = document.getElementById("reset-button");
+  resetButton.addEventListener("click", resetPage);
 
+  function resetPage() {
+    // מציאת אלמנטים שברצונך למחוק ולהציג מחדש
+    const element1 = document.getElementById("element1");
+    const element2 = document.getElementById("element2");
 
-    const keyboardContainer = document.getElementById("keyboard");
+    // מחיקת התוכן של האלמנטים
+    element1.innerHTML = "";
+    element2.innerHTML = "";
 
-    for (const letter of list) {
-      const button = document.createElement("button");
-      button.classList.add("letter-button");
-      button.textContent = letter;
-      keyboardContainer.appendChild(button);
-    }
+    // הוספת התוכן החדש לאלמנטים
+    element1.innerHTML = "New Content 1";
+    element2.innerHTML = "New Content 2";
+  }
   </script> -->
+  <script src="letters.js"></script>
 </body>
 </html>

@@ -1,0 +1,18 @@
+.game-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-list a {
+    margin: 10px;
+    text-decoration: none;
+}
+
+.game-image {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+}

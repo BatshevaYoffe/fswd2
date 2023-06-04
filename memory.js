@@ -1,154 +1,148 @@
-var username =JSON.parse(localStorage.getItem('playnow'));
-
-const cardsArray = [
-	{
-		name: 'apple',
-		img: 'images/apple.jpeg'
-	},
-	{
-		name: 'banana',
-		img: 'images/banana.jpeg'
-	},
-	{
-		name: 'cherry',
-		img: 'images/cherry.jpeg'
-	},
-	{
-		name: 'grape',
-		img: 'images/grape.jpeg'
-	},
-	{
-		name: 'lemon',
-		img: 'images/lemon.jpeg'
-	},
-	{
-		name: 'orange',
-		img: 'images/orange.jpeg'
-	},
-	{
-		name: 'pear',
-		img: 'images/pear.jpeg'
-	},
-	{
-		name: 'strawberry',
-		img: 'images/strawberry.jpeg'
-	},
-    {
-		name: 'apple',
-		img: 'images/apple.jpeg'
-	},
-	{
-		name: 'banana',
-		img: 'images/banana.jpeg'
-	},
-	{
-		name: 'cherry',
-		img: 'images/cherry.jpeg'
-	},
-	{
-		name: 'grape',
-		img: 'images/grape.jpeg'
-	},
-	{
-		name: 'lemon',
-		img: 'images/lemon.jpeg'
-	},
-	{
-		name: 'orange',
-		img: 'images/orange.jpeg'
-	},
-	{
-		name: 'pear',
-		img: 'images/pear.jpeg'
-	},
-	{
-		name: 'strawberry',
-		img: 'images/strawberry.jpeg'
-	},
-];
-
-let cardsChosen = [];
-let cardsChosenId = [];
-let cardsWon = [];
-
-const gameGrid = document.querySelector('.game-grid');
-const resetButton = document.querySelector('.reset-button');
-
-function createBoard() {
-    console.log("createBoard");
-	for (let i = 0; i < cardsArray.length; i++) {
-		const card = document.createElement('div');
-		card.classList.add('card');
-		card.setAttribute('data-id', i);
-		card.addEventListener('click', flipCard);
-		gameGrid.appendChild(card);
-	}
+const selectors = {
+    boardContainer: document.querySelector('.board-container'),
+    board: document.querySelector('.board'),
+    moves: document.querySelector('.moves'),
+    timer: document.querySelector('.timer'),
+    start: document.querySelector('button'),
+    win: document.querySelector('.win')
 }
 
-function flipCard() {
-	const cardId = this.getAttribute('data-id');
-	cardsChosen.push(cardsArray[cardId].name);
-	cardsChosenId.push(cardId);
-	this.classList.add('flipped');
-	if (cardsChosen.length === 2) {
-        console.log(cardsChosen);
-		setTimeout(checkForMatch, 500);
-	}
+const state = {
+    gameStarted: false,
+    flippedCards: 0,
+    totalFlips: 0,
+    totalTime: 0,
+    loop: null
 }
 
-function checkForMatch() {
-	const cards = document.querySelectorAll('.card');
-	const optionOneId = cardsChosenId[0];
-	const optionTwoId = cardsChosenId[1];
-	if (cardsChosen[0] === cardsChosen[1]) {
-		alert('You found a match!');
-        updateScore(username,1);
-		cards[optionOneId].classList.add('matched');
-		cards[optionTwoId].classList.add('matched');
-		cardsWon.push(cardsChosen);
-	} else {
-		cards[optionOneId].classList.remove('flipped');
-		cards[optionTwoId].classList.remove('flipped');
-		alert('Sorry, try again.');
-	}
-	cardsChosen = [];
-	cardsChosenId = [];
-	if (cardsWon.length === cardsArray.length / 2) {
-        updateScore("username",1)
-        alert('Congratulations! You found them all!');
-	}
-}
+const shuffle = array => {
+    const clonedArray = [...array]
 
-function resetBoard() {
-    console.log("resetBoard");
-	gameGrid.innerHTML = '';
-	cardsWon = [];
-	createBoard();
-}
+    for (let index = clonedArray.length - 1; index > 0; index--) {
+        const randomIndex = Math.floor(Math.random() * (index + 1))
+        const original = clonedArray[index]
 
-createBoard();
-
-resetButton.addEventListener('click', resetBoard);
-function updateScore(username, newScore) {
-    console.log("update");
-    // שליפת רשימת המשתמשים מהלוקל סטורז
-    var users = JSON.parse(localStorage.getItem('users')) || [];
-  
-    // חיפוש המשתמש לפי שם המשתמש
-    for (var i = 0; i < users.length; i++) {
-        console.log(users[i].username);
-        console.log(username);
-
-      if (users[i].username === username) {
-        // עדכון הניקוד של המשתמש
-        console.log(users[i]);
-
-        users[i].score =users[i].score +newScore;
-        break;
-      }
+        clonedArray[index] = clonedArray[randomIndex]
+        clonedArray[randomIndex] = original
     }
-  
-    // שמירת רשימת המשתמשים בלוקל סטורז
-    localStorage.setItem('users', JSON.stringify(users));
-  }
-  
+
+    return clonedArray
+}
+
+const pickRandom = (array, items) => {
+    const clonedArray = [...array]
+    const randomPicks = []
+
+    for (let index = 0; index < items; index++) {
+        const randomIndex = Math.floor(Math.random() * clonedArray.length)
+        
+        randomPicks.push(clonedArray[randomIndex])
+        clonedArray.splice(randomIndex, 1)
+    }
+
+    return randomPicks
+}
+
+const generateGame = () => {
+    const dimensions = selectors.board.getAttribute('data-dimension')
+
+    if (dimensions % 2 !== 0) {
+        throw new Error("The dimension of the board must be an even number.")
+    }
+
+    const emojis = ['🥔', '🍒', '🥑', '🌽', '🥕', '🍇', '🍉', '🍌', '🥭', '🍍']
+    const picks = pickRandom(emojis, (dimensions * dimensions) / 2) 
+    const items = shuffle([...picks, ...picks])
+    const cards = `
+        <div class="board" style="grid-template-columns: repeat(${dimensions}, auto)">
+            ${items.map(item => `
+                <div class="card">
+                    <div class="card-front"></div>
+                    <div class="card-back">${item}</div>
+                </div>
+            `).join('')}
+       </div>
+    `
+    
+    const parser = new DOMParser().parseFromString(cards, 'text/html')
+
+    selectors.board.replaceWith(parser.querySelector('.board'))
+}
+
+const startGame = () => {
+    state.gameStarted = true
+    selectors.start.classList.add('disabled')
+
+    state.loop = setInterval(() => {
+        state.totalTime++
+
+        selectors.moves.innerText = `${state.totalFlips} moves`
+        selectors.timer.innerText = `time: ${state.totalTime} sec`
+    }, 1000)
+}
+
+const flipBackCards = () => {
+    document.querySelectorAll('.card:not(.matched)').forEach(card => {
+        card.classList.remove('flipped')
+    })
+
+    state.flippedCards = 0
+}
+
+const flipCard = card => {
+    state.flippedCards++
+    state.totalFlips++
+
+    if (!state.gameStarted) {
+        startGame()
+    }
+
+    if (state.flippedCards <= 2) {
+        card.classList.add('flipped')
+    }
+
+    if (state.flippedCards === 2) {
+        const flippedCards = document.querySelectorAll('.flipped:not(.matched)')
+
+        if (flippedCards[0].innerText === flippedCards[1].innerText) {
+            flippedCards[0].classList.add('matched')
+            flippedCards[1].classList.add('matched')
+        }
+
+        setTimeout(() => {
+            flipBackCards()
+        }, 1000)
+    }
+
+    // If there are no more cards that we can flip, we won the game
+    if (!document.querySelectorAll('.card:not(.flipped)').length) {
+        setTimeout(() => {
+            selectors.boardContainer.classList.add('flipped')
+            selectors.win.innerHTML = `
+                <span class="win-text">
+                    You won!<br />
+                    with <span class="highlight">${state.totalFlips}</span> moves<br />
+                    under <span class="highlight">${state.totalTime}</span> seconds
+                </span>
+            `
+
+            clearInterval(state.loop)
+        }, 1000)
+    }
+}
+
+const attachEventListeners = () => {
+    document.addEventListener('click', event => {
+        const eventTarget = event.target
+        const eventParent = eventTarget.parentElement
+
+        if (eventTarget.className.includes('card') && !eventParent.className.includes('flipped')) {
+            flipCard(eventParent)
+        } else if (eventTarget.nodeName === 'BUTTON' && !eventTarget.className.includes('disabled')) {
+            startGame()
+        }
+    })
+}
+
+generateGame()
+attachEventListeners()
