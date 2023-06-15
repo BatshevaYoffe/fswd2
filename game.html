@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Memory Game</title>
+  <!-- <link rel="stylesheet" type="text/css" href="styles.css"> -->
+  <style>
+.icon {
+  display: none;
+}
+
+
+  </style>
+</head>
+<body>
+  <h1>Memory Game</h1>
+  <ul id="icon-list">
+    <li><i class="icon" data-icon="icon1"></i></li>
+    <li><i class="icon" data-icon="icon2"></i></li>
+    <li><i class="icon" data-icon="icon3"></i></li>
+    <!-- וכן הלאה -->
+  </ul>
+  
+<script>
+    const iconList = document.getElementById("icon-list");
+const icons = document.getElementsByClassName("icon");
+
+// הוספת אירוע לחיצה לכל האייקונים
+for (let i = 0; i < icons.length; i++) {
+  icons[i].addEventListener("click", showIcon);
+}
+
+function showIcon(event) {
+  // קבלת אלמנט האייקון שנלחץ
+  const clickedIcon = event.target;
+  // קבלת שם האייקון מ-attribute המותאם אישית data-icon
+  const iconName = clickedIcon.getAttribute("data-icon");
+  
+  // הצגת האייקון שנלחץ
+  clickedIcon.style.display = "block";
+  // הסתרת כל האייקונים האחרים
+  for (let i = 0; i < icons.length; i++) {
+    if (icons[i] !== clickedIcon) {
+      icons[i].style.display = "none";
+    }
+  }
+  
+  console.log("Clicked icon: " + iconName);
+}
+
+</script>
+</body>
+
+</html>

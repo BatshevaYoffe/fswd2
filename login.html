@@ -3,32 +3,32 @@
 
 <head>
     <title>כניסה והרשמה</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="login.css">
 
 </head>
 
 <body>
     <form id="loginForm">
-        <h1>כניסה</h1>
-        <label for="username">שם משתמש:</label>
+        <h1>Welcome :)</h1>
+        <label for="username">User name:</label>
         <input type="text" id="username" required><br>
-        <label for="password">סיסמה:</label>
+        <label for="password">Password:</label>
         <input type="password" id="password" required><br>
-        <button type="submit">כניסה</button>
+        <button type="submit">Login</button>
         <br />
-        <button type="button" id="registrationButton"> מעבר להרשמה</button>
+        <button type="button" id="registrationButton">go to Register</button>
     </form>
 
 
     <form id="registrationForm" style="display: none;">
-        <h1>הרשמה</h1>
-        <label for="newUsername">שם משתמש:</label>
+        <h1>Register</h1>
+        <label for="newUsername">User name:</label>
         <input type="text" id="newUsername" required><br>
-        <label for="newPassword">סיסמה:</label>
+        <label for="newPassword">Password:</label>
         <input type="password" id="newPassword" required><br>
-        <button type="submit">הרשמה</button>
+        <button type="submit">Register</button>
         <br />
-        <button type="button" id="loginButton">מעבר לכניסה</button>
+        <button type="button" id="loginButton">go to login</button>
     </form>
 
     <script src="login.js"></script>

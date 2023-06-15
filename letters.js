@@ -84,7 +84,7 @@ function checkGameOver() {
     gameOverMessage.classList.remove("hidden");
     disableLetterButtons();
   } else if (!wordDisplay.textContent.includes("_")) {
-    updateScore(username,initialScore);
+    updateScore(username,guessesLeft);
     gameOverMessage.textContent = "Congratulations - You Win!";
     gameOverMessage.classList.remove("hidden");
     disableLetterButtons();

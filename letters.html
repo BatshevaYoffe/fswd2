@@ -1,48 +1,32 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Hangman Game</title>
   <link rel="stylesheet" type="text/css" href="navbar.css">
+  <link rel="stylesheet" type="text/css" href="letters.css">
 
-  <style>
-    .hidden {
-      display: none;
-    }
-  </style>
+
 </head>
+
 <body>
-  <div id="navbar">
-    <span id="username"></span>
-    <a href="gamesGallery.html">משחקים</a>
-    <a href="home.html">ניקוד שחקנים</a>
-    <a href="login.html">יציאה</a>
-</div>
-  <h1>Hangman Game</h1>
-  <div id="word-display"></div>
-  <div id="guesses-left"></div>
-  <div id="letters-guessed"></div>
-  <div id="keyboard"></div>
-  <div id="game-over-message" class="hidden"></div>
-  <button id="reset-button">Start Game</button>
+  <div class="body1">
+    <div id="navbar">
+      <span id="username"></span>
+      <a href="gamesGallery.html">games</a>
+      <a href="home.html">users score</a>
+      <a href="login.html">logout</a>
+    </div>
+    <h1>Hangman Game</h1>
+    <div id="word-display" class="game-element"></div>
+    <div id="guesses-left" class="game-element"></div>
+    <div id="letters-guessed" class="game-element"></div>
+    <div id="keyboard" class="game-element"></div>
+    <div id="game-over-message" class="game-element hidden"></div>
+    <a href="letters.html" class="start-game-link">Start new game</a>
+  </div>
 
-  <!-- <script>
-    const resetButton = document.getElementById("reset-button");
-  resetButton.addEventListener("click", resetPage);
-
-  function resetPage() {
-    // מציאת אלמנטים שברצונך למחוק ולהציג מחדש
-    const element1 = document.getElementById("element1");
-    const element2 = document.getElementById("element2");
-
-    // מחיקת התוכן של האלמנטים
-    element1.innerHTML = "";
-    element2.innerHTML = "";
-
-    // הוספת התוכן החדש לאלמנטים
-    element1.innerHTML = "New Content 1";
-    element2.innerHTML = "New Content 2";
-  }
-  </script> -->
   <script src="letters.js"></script>
 </body>
+
 </html>
