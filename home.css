@@ -1,0 +1,54 @@
+  /* סגנון לטבלת ניקוד */
+  /* #scoreboard {
+    border-collapse: separate;
+    width: 100%;
+  }
+
+  #scoreboard td,
+  #scoreboard th {
+    border: 2px solid #1a68c9;
+    text-align: center;
+
+    padding: 8px;
+  }
+
+  #scoreboard th {
+    background-color: #f1f1f1;
+    text-align: center;
+  }
+
+  #scoreboardBody .highlighted {
+font-weight: bold;
+} */
+.title{
+    background-color: darkgrey;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+  }
+  
+  th, td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  tr:hover {
+    background-color: #ddd;
+  }
+
+  .play_now_user{
+    background-color: #95adf0
+  }

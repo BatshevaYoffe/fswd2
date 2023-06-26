@@ -1,5 +1,5 @@
 
-const words = ["javascript", "html", "css", "node"];
+const words = ["banana", "apple", "cherry", "grape","lemon","orange","pear","strawbwrry"];
 const LIST = new Array(26).fill(1).map((_, i) => String.fromCharCode(65 + i));
 var username =JSON.parse(localStorage.getItem('playnow'));
 
@@ -109,7 +109,7 @@ function updateScore(username, newScore) {
     if (users[i].username === username) {
       // עדכון הניקוד של המשתמש
       console.log(users[i]);
-
+      users[i].winTimes=users[i].winTimes+1;
       users[i].score =users[i].score +newScore;
       break;
     }

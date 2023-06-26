@@ -1,6 +1,13 @@
+body{
+  /* background-color: antiquewhite; */
+  background-image: url("images/letters.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+
+}  
 h1 {
   font-size: 32px;
-  color: #333;
+  color: white;
   text-align: center;
   margin-bottom: 20px;
 }
@@ -21,7 +28,6 @@ h1 {
 #game-over-message {
   width: 600px;
   margin: 0 auto;
-  /* מרכז את האלמנט באופן אופקי */
 }
 
 /* #game-over-message {
@@ -57,23 +63,6 @@ h1 {
   color: #fff;
 } 
 
-
-h1 {
-  font-size: 32px;
-  color: #333;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.game-element {
-  background-color: #fff;
-  border: 1px solid #ccc;
-  padding: 20px;
-  margin-bottom: 20px;
-  border-radius: 5px;
-}
-
-
 .start-game-link {
   display: block;
   text-align: center;
@@ -88,7 +77,6 @@ h1 {
   font-weight: bold;
   transition: background-color 0.3s ease;
   margin: 0 auto;
-  /* מרכוז הקישור ברוחב */
 
 }
 

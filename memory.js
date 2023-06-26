@@ -1,148 +1,129 @@
-const selectors = {
-    boardContainer: document.querySelector('.board-container'),
-    board: document.querySelector('.board'),
-    moves: document.querySelector('.moves'),
-    timer: document.querySelector('.timer'),
-    start: document.querySelector('button'),
-    win: document.querySelector('.win')
+const emojis = ['🥔', '🍒', '🥑', '🌽', '🥕', '🍇', '🍉', '🍌', '🥭', '🍍']
+const gameOverMessage = document.getElementById("game-over-message");
+
+// רשימת האיקונים
+const icons = [
+    '🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼',
+    '🐯', '🦁', '🐷', '🐸', '🐵', '🐤', '🦉', '🦆'
+];
+
+let cards = [];
+let flippedCards = [];
+let matchedCards = [];
+
+let initialScore = 10; 
+var username =JSON.parse(localStorage.getItem('playnow'));
+
+// יצירת קלף
+function createCard(icon) {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = '<span class="hidden">' + icon + '</span>';
+    card.addEventListener('click', function () {
+        if (!card.classList.contains('flipped') && flippedCards.length < 2) {
+            flipCard(card);
+        }
+    });
+    return card;
 }
 
-const state = {
-    gameStarted: false,
-    flippedCards: 0,
-    totalFlips: 0,
-    totalTime: 0,
-    loop: null
-}
+// הפיכת הקלף
+function flipCard(card) {
+    card.classList.add('flipped');
+    card.querySelector('.hidden').style.display = 'block';
+    flippedCards.push(card);
 
-const shuffle = array => {
-    const clonedArray = [...array]
-
-    for (let index = clonedArray.length - 1; index > 0; index--) {
-        const randomIndex = Math.floor(Math.random() * (index + 1))
-        const original = clonedArray[index]
-
-        clonedArray[index] = clonedArray[randomIndex]
-        clonedArray[randomIndex] = original
+    if (flippedCards.length === 2) {
+        setTimeout(checkMatch, 1000);
     }
-
-    return clonedArray
 }
 
-const pickRandom = (array, items) => {
-    const clonedArray = [...array]
-    const randomPicks = []
-
-    for (let index = 0; index < items; index++) {
-        const randomIndex = Math.floor(Math.random() * clonedArray.length)
-        
-        randomPicks.push(clonedArray[randomIndex])
-        clonedArray.splice(randomIndex, 1)
-    }
-
-    return randomPicks
+// החזרת הקלפים למערכים המתאימים
+function unflipCards() {
+    flippedCards.forEach(card => {
+        card.classList.remove('flipped');
+        card.querySelector('.hidden').style.display = 'none';
+    });
+    flippedCards = [];
 }
 
-const generateGame = () => {
-    const dimensions = selectors.board.getAttribute('data-dimension')
-
-    if (dimensions % 2 !== 0) {
-        throw new Error("The dimension of the board must be an even number.")
-    }
-
-    const emojis = ['🥔', '🍒', '🥑', '🌽', '🥕', '🍇', '🍉', '🍌', '🥭', '🍍']
-    const picks = pickRandom(emojis, (dimensions * dimensions) / 2) 
-    const items = shuffle([...picks, ...picks])
-    const cards = `
-        <div class="board" style="grid-template-columns: repeat(${dimensions}, auto)">
-            ${items.map(item => `
-                <div class="card">
-                    <div class="card-front"></div>
-                    <div class="card-back">${item}</div>
-                </div>
-            `).join('')}
-       </div>
-    `
+// התאמת הקלפים
+function matchCards() {
+    flippedCards.forEach(card => {
+        card.classList.add('matched');
+        matchedCards.push(card);
+    });
+    flippedCards = [];
     
-    const parser = new DOMParser().parseFromString(cards, 'text/html')
-
-    selectors.board.replaceWith(parser.querySelector('.board'))
-}
-
-const startGame = () => {
-    state.gameStarted = true
-    selectors.start.classList.add('disabled')
-
-    state.loop = setInterval(() => {
-        state.totalTime++
-
-        selectors.moves.innerText = `${state.totalFlips} moves`
-        selectors.timer.innerText = `time: ${state.totalTime} sec`
-    }, 1000)
-}
-
-const flipBackCards = () => {
-    document.querySelectorAll('.card:not(.matched)').forEach(card => {
-        card.classList.remove('flipped')
-    })
-
-    state.flippedCards = 0
-}
-
-const flipCard = card => {
-    state.flippedCards++
-    state.totalFlips++
-
-    if (!state.gameStarted) {
-        startGame()
-    }
-
-    if (state.flippedCards <= 2) {
-        card.classList.add('flipped')
-    }
-
-    if (state.flippedCards === 2) {
-        const flippedCards = document.querySelectorAll('.flipped:not(.matched)')
-
-        if (flippedCards[0].innerText === flippedCards[1].innerText) {
-            flippedCards[0].classList.add('matched')
-            flippedCards[1].classList.add('matched')
-        }
-
-        setTimeout(() => {
-            flipBackCards()
-        }, 1000)
-    }
-
-    // If there are no more cards that we can flip, we won the game
-    if (!document.querySelectorAll('.card:not(.flipped)').length) {
-        setTimeout(() => {
-            selectors.boardContainer.classList.add('flipped')
-            selectors.win.innerHTML = `
-                <span class="win-text">
-                    You won!<br />
-                    with <span class="highlight">${state.totalFlips}</span> moves<br />
-                    under <span class="highlight">${state.totalTime}</span> seconds
-                </span>
-            `
-
-            clearInterval(state.loop)
-        }, 1000)
+    if (matchedCards.length === cards.length) {
+        setTimeout(function () {
+            updateScore(username,initialScore);
+            alert('כל הקלפים מתאימים! תעלה לרמה הבאה.');
+            resetGame();
+        }, 500);
     }
 }
 
-const attachEventListeners = () => {
-    document.addEventListener('click', event => {
-        const eventTarget = event.target
-        const eventParent = eventTarget.parentElement
+// בדיקת התאמת הקלפים
+function checkMatch() {
+    const [card1, card2] = flippedCards;
+    const icon1 = card1.querySelector('.hidden').innerHTML;
+    const icon2 = card2.querySelector('.hidden').innerHTML;
 
-        if (eventTarget.className.includes('card') && !eventParent.className.includes('flipped')) {
-            flipCard(eventParent)
-        } else if (eventTarget.nodeName === 'BUTTON' && !eventTarget.className.includes('disabled')) {
-            startGame()
-        }
-    })
+    if (icon1 === icon2) {
+        matchCards();
+    } else {
+        setTimeout(unflipCards, 500);
+    }
 }
 
-generateGame()
-attachEventListeners()
+// איפוס המשחק
+function resetGame() {
+    const gameContainer = document.querySelector('.game-container');
+    gameContainer.innerHTML = '';
+    cards = [];
+    flippedCards = [];
+    matchedCards = [];
+}
+
+// התחלת המשחק
+function startGame(level) {
+    resetGame();
+
+    const gameContainer = document.querySelector('.game-container');
+    //עידכון מספר הקלפים במשחק
+    const pairs = level*2;
+    initialScore=pairs;
+    const randomIcons = icons.sort(() => Math.random() - 0.5).slice(0, pairs);
+    const duplicatedIcons = [...randomIcons, ...randomIcons].sort(() => Math.random() - 0.5);
+
+
+    duplicatedIcons.forEach(icon => {
+        const card = createCard(icon);
+        cards.push(card);
+        gameContainer.appendChild(card);
+    });
+}
+
+function updateScore(username, newScore) {
+    console.log("update");
+    // שליפת רשימת המשתמשים מהלוקל סטורז
+    var users = JSON.parse(localStorage.getItem('users')) || [];
+  
+    // חיפוש המשתמש לפי שם המשתמש
+    for (var i = 0; i < users.length; i++) {
+        console.log(users[i].username);
+        console.log(username);
+  
+      if (users[i].username === username) {
+        // עדכון הניקוד ומספר הנצחונות של המשתמש
+        users[i].winTimes=users[i].winTimes+1;
+        users[i].score =users[i].score +newScore;
+        break;
+      }
+    }
+  
+    // שמירת רשימת המשתמשים עם עידכון למשתמש המשחק בלוקל סטורז
+    localStorage.setItem('users', JSON.stringify(users));
+  }
+  

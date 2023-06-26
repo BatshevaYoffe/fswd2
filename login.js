@@ -1,18 +1,99 @@
+// function setLoggedInCookie(minutes, username) {
+//   console.log("set");
+//   var expirationDate = new Date();
+//   expirationDate.setTime(expirationDate.getTime() + (minutes * 60 * 1000));
+//   document.cookie = `loggedIn=true; expires=${expirationDate.toUTCString()}; path=/`;
+//   document.cookie = `username=${encodeURIComponent(username)}; expires=${expirationDate.toUTCString()}; path=/`;
+// }
+
+// function getLoggedInUsername() {
+//   console.log('get');
+//   const cookies = document.cookie.split(";").map(cookie => cookie.trim());
+//   const loggedInCookie = cookies.find(cookie => cookie.startsWith("loggedIn="));
+//   const usernameCookie = cookies.find(cookie => cookie.startsWith("username="));
+//   const loggedIn = loggedInCookie ? loggedInCookie.split("=")[1].trim() : null;
+//   const username = usernameCookie ? decodeURIComponent(usernameCookie.split("=")[1].trim()) : null;
+//   console.log(loggedIn);
+//   console.log(username);
+//   return loggedIn === "true" ? username : null;
+// }
+
+
+// function setLoggedInCookie(minutes, username) {
+//   console.log(username);
+//   var expirationDate = new Date();
+//   expirationDate.setTime(expirationDate.getTime() + (minutes * 60 * 1000));
+//   document.cookie = `loggedIn=true; expires=${expirationDate.toUTCString()}; path=/`;
+//   document.cookie = `username=${encodeURIComponent(username)}; expires=${expirationDate.toUTCString()}; path=/`;
+// }
+
+// function getLoggedInUsername() {
+//   const cookies = document.cookie.split(";").map(cookie => cookie.trim());
+//   const loggedInCookie = cookies.find(cookie => cookie.startsWith("loggedIn="));
+//   const usernameCookie = cookies.find(cookie => cookie.startsWith("username="));
+//   const loggedIn = loggedInCookie ? loggedInCookie.split("=")[1].trim() : null;
+//   const username = usernameCookie ? decodeURIComponent(usernameCookie.split("=")[1].trim()) : null;
+//   return loggedIn === "true" ? username : null;
+// }
+
+
+// if(getLoggedInUsername()){
+//   window.location.href = 'home.html';
+// }
+
+function setCookie(cname,cvalue,exdays) {
+  const d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  let expires = "expires=" + d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+function checkCookie(U) {
+  let user = getCookie("username");
+  if (user != "") {
+    alert("Welcome again " + user);
+      window.location.href = 'home.html';
+
+  } else {
+    //  user = prompt("Please enter your name:","");
+     if (U != "" && U != null) {
+       setCookie("username", user, 30);
+     }
+  }
+}
+
 document.getElementById('loginForm').addEventListener('submit', function(event) {
     event.preventDefault();
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
   
-    if (isUserExists(username, password)) {
+    if (isUserExistslogin(username, password)) {
       // עושה מה שצריך כאשר הכניסה מוצלחת
       localStorage.setItem('playnow', JSON.stringify(username));
-      // שמירת הנתונים ב-Cookie עם זמן תפוגה
-      setCookie('username', username, 1); // ימים
-      setCookie('password', password, 1); // ימים
+      // setLoggedInCookie(2,username);
+      console.log('after set');
+      updateLoginTimes(username);
+      checkCookie(username);
       // העברה לעמוד אחר\
-      window.location.href = 'home.html';
+      // window.location.href = 'home.html';
 
-
+// console.log(`${getLoggedInUsername()}cooki`);
       console.log('התחברת בהצלחה!');
     } else {
       // עושה מה שצריך כאשר הכניסה נכשלת
@@ -27,7 +108,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     const newUsername = document.getElementById('newUsername').value;
     const newPassword = document.getElementById('newPassword').value;
   
-    if (!isUserExists(newUsername)) {
+    if (!isUserExistsreg(newUsername)) {
       const newUser = {
         username: newUsername,
         password: newPassword,
@@ -51,10 +132,16 @@ function getUsersFromLocalStorage() {
     return [];
 }
   
-function isUserExists(username, password) {
+function isUserExistslogin(username, password) {
     const users = getUsersFromLocalStorage();
   
     return users.some(user => user.username === username && user.password === password);
+}
+
+function isUserExistsreg(username, password) {
+  const users = getUsersFromLocalStorage();
+
+  return users.some(user => user.username === username || user.password === password);
 }
   
 function addUserToLocalStorage(user) {
@@ -80,12 +167,7 @@ document.getElementById("registrationButton").addEventListener("click", showRegi
   
   // מאזין ללחיצה על כפתור הכניסה ומפעיל את פונקציית ההצגה המתאימה
 document.getElementById("loginButton").addEventListener("click", showLoginForm);
-  // פונקציה להגדרת Cookie
-function setCookie(name, value, days) {
-    const expires = new Date();
-    expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
-    document.cookie = name + '=' + value + ';expires=' + expires.toUTCString() + ';path=/';
-}
+
 
 function updateLoginTimes(username) {
   // שליפת רשימת המשתמשים מהלוקל סטורז
