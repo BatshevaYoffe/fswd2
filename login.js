@@ -1,57 +1,22 @@
-// function setLoggedInCookie(minutes, username) {
-//   console.log("set");
-//   var expirationDate = new Date();
-//   expirationDate.setTime(expirationDate.getTime() + (minutes * 60 * 1000));
-//   document.cookie = `loggedIn=true; expires=${expirationDate.toUTCString()}; path=/`;
-//   document.cookie = `username=${encodeURIComponent(username)}; expires=${expirationDate.toUTCString()}; path=/`;
-// }
-
-// function getLoggedInUsername() {
-//   console.log('get');
-//   const cookies = document.cookie.split(";").map(cookie => cookie.trim());
-//   const loggedInCookie = cookies.find(cookie => cookie.startsWith("loggedIn="));
-//   const usernameCookie = cookies.find(cookie => cookie.startsWith("username="));
-//   const loggedIn = loggedInCookie ? loggedInCookie.split("=")[1].trim() : null;
-//   const username = usernameCookie ? decodeURIComponent(usernameCookie.split("=")[1].trim()) : null;
-//   console.log(loggedIn);
-//   console.log(username);
-//   return loggedIn === "true" ? username : null;
-// }
-
-
-// function setLoggedInCookie(minutes, username) {
-//   console.log(username);
-//   var expirationDate = new Date();
-//   expirationDate.setTime(expirationDate.getTime() + (minutes * 60 * 1000));
-//   document.cookie = `loggedIn=true; expires=${expirationDate.toUTCString()}; path=/`;
-//   document.cookie = `username=${encodeURIComponent(username)}; expires=${expirationDate.toUTCString()}; path=/`;
-// }
-
-// function getLoggedInUsername() {
-//   const cookies = document.cookie.split(";").map(cookie => cookie.trim());
-//   const loggedInCookie = cookies.find(cookie => cookie.startsWith("loggedIn="));
-//   const usernameCookie = cookies.find(cookie => cookie.startsWith("username="));
-//   const loggedIn = loggedInCookie ? loggedInCookie.split("=")[1].trim() : null;
-//   const username = usernameCookie ? decodeURIComponent(usernameCookie.split("=")[1].trim()) : null;
-//   return loggedIn === "true" ? username : null;
-// }
-
-
-// if(getLoggedInUsername()){
-//   window.location.href = 'home.html';
-// }
-
 function setCookie(cname,cvalue,exdays) {
+  console.log(cname,cvalue,exdays);
   const d = new Date();
   d.setTime(d.getTime() + (exdays*24*60*60*1000));
   let expires = "expires=" + d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/login";
+  //בעיה עם הדפדפן
+  console.log(document.cookie);
 }
 
 function getCookie(cname) {
+  console.log('getcooooo1');
   let name = cname + "=";
   let decodedCookie = decodeURIComponent(document.cookie);
+  console.log(decodedCookie);
+
   let ca = decodedCookie.split(';');
+  console.log(decodedCookie);
+
   for(let i = 0; i < ca.length; i++) {
     let c = ca[i];
     while (c.charAt(0) == ' ') {
@@ -65,7 +30,9 @@ function getCookie(cname) {
 }
 
 function checkCookie(U) {
+  console.log(U);
   let user = getCookie("username");
+  console.log(user);
   if (user != "") {
     alert("Welcome again " + user);
       window.location.href = 'home.html';
@@ -73,7 +40,7 @@ function checkCookie(U) {
   } else {
     //  user = prompt("Please enter your name:","");
      if (U != "" && U != null) {
-       setCookie("username", user, 30);
+       setCookie("username", U, 30);
      }
   }
 }
@@ -91,9 +58,8 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
       updateLoginTimes(username);
       checkCookie(username);
       // העברה לעמוד אחר\
-      // window.location.href = 'home.html';
+      window.location.href = 'home.html';
 
-// console.log(`${getLoggedInUsername()}cooki`);
       console.log('התחברת בהצלחה!');
     } else {
       // עושה מה שצריך כאשר הכניסה נכשלת
@@ -108,7 +74,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     const newUsername = document.getElementById('newUsername').value;
     const newPassword = document.getElementById('newPassword').value;
   
-    if (!isUserExistsreg(newUsername)) {
+    if (!isUserExistsreg(newUsername)&&validateInput(newPassword)) {
       const newUser = {
         username: newUsername,
         password: newPassword,
@@ -119,6 +85,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
   
       addUserToLocalStorage(newUser);
       console.log('נרשמת בהצלחה!');
+      showLoginForm();
     } else {
       console.log('שם משתמש כבר קיים!');
     }
@@ -142,6 +109,14 @@ function isUserExistsreg(username, password) {
   const users = getUsersFromLocalStorage();
 
   return users.some(user => user.username === username || user.password === password);
+}
+function validateInput(input) {
+  // בדיקה שהקלט הוא מחרוזת בדיוק 4 תווים
+  if (typeof input === 'string' && input.length === 4) {
+    return true; // הקלט תקין
+  }
+  
+  return false; // הקלט לא תקין
 }
   
 function addUserToLocalStorage(user) {

@@ -1,5 +1,5 @@
 
-const words = ["banana", "apple", "cherry", "grape","lemon","orange","pear","strawbwrry"];
+const words = ["banana", "apple", "cherry", "grape","lemon","orange","pear","strawbwrry","blackberry","lime","blueberry","kiwi"];
 const LIST = new Array(26).fill(1).map((_, i) => String.fromCharCode(65 + i));
 var username =JSON.parse(localStorage.getItem('playnow'));
 

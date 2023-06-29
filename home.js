@@ -1,7 +1,7 @@
 // שליפת השם מאחסון המקומי
 var storedUsername = JSON.parse(localStorage.getItem('playnow'));
 var usernameElement = document.getElementById('username');
-usernameElement.textContent = "hello "+storedUsername;
+usernameElement.textContent = "HELLO "+storedUsername;
 
 document.addEventListener('DOMContentLoaded', function () {
   // שליפת נתונים מהלוקל סטורז
@@ -32,8 +32,10 @@ document.addEventListener('DOMContentLoaded', function () {
     var winTimesCell = row.insertCell();
     winTimesCell.textContent = player.winTimes;
 
-
+console.log(storedUsername);
+console.log(player.username);
 	if(player.username===storedUsername){
+    console.log('yes');
 		row.className = 'play_now_user';
 	}
   }
